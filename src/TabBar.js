@@ -17,6 +17,7 @@ import type {
   SceneRendererProps,
   NavigationState,
 } from './types';
+import Gradient from 'react-native-linear-gradient';
 
 export type Props<T> = {|
   ...SceneRendererProps,
@@ -277,92 +278,104 @@ export default class TabBar<T: Route> extends React.Component<Props<T>, State> {
     const translateX = Animated.multiply(this.state.scrollAmount, -1);
 
     return (
-      <Animated.View style={[styles.tabBar, style]}>
-        <Animated.View
-          pointerEvents="none"
-          style={[
-            styles.indicatorContainer,
-            scrollEnabled
-              ? { width: tabBarWidth, transform: [{ translateX }] }
-              : null,
-          ]}
-        >
-          {this.props.renderIndicator({
-            position,
-            layout,
-            navigationState,
-            jumpTo,
-            addListener,
-            removeListener,
-            width: tabWidth,
-            style: indicatorStyle,
-          })}
-        </Animated.View>
-        <View style={styles.scroll}>
-          <Animated.ScrollView
-            horizontal
-            keyboardShouldPersistTaps="handled"
-            scrollEnabled={scrollEnabled}
-            bounces={bounces}
-            alwaysBounceHorizontal={false}
-            scrollsToTop={false}
-            showsHorizontalScrollIndicator={false}
-            automaticallyAdjustContentInsets={false}
-            overScrollMode="never"
-            contentContainerStyle={[
-              styles.tabContent,
-              scrollEnabled ? null : styles.container,
-              contentContainerStyle,
+      <Gradient
+        colors={['#6B5FFF', '#693DB5']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        locations={[0, 0.8, 1.5]}
+        useAngle
+        angle={90}
+        angleCenter={{ x: 0.5, y: 0.5 }}
+      >
+        <Animated.View style={[styles.tabBar, style]}>
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.indicatorContainer,
+              scrollEnabled
+                ? { width: tabBarWidth, transform: [{ translateX }] }
+                : null,
             ]}
-            scrollEventThrottle={16}
-            onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: {
-                    contentOffset: { x: this.state.scrollAmount },
-                  },
-                },
-              ],
-              { useNativeDriver: true }
-            )}
-            onScrollBeginDrag={this._handleBeginDrag}
-            onScrollEndDrag={this._handleEndDrag}
-            onMomentumScrollBegin={this._handleMomentumScrollBegin}
-            onMomentumScrollEnd={this._handleMomentumScrollEnd}
-            contentOffset={this.state.initialOffset}
-            ref={el => (this._scrollView = el && el.getNode())}
           >
-            {routes.map((route: T) => (
-              <TabBarItem
-                key={route.key}
-                position={position}
-                route={route}
-                tabWidth={tabWidth}
-                navigationState={navigationState}
-                scrollEnabled={scrollEnabled}
-                getAccessibilityLabel={getAccessibilityLabel}
-                getAccessible={getAccessible}
-                getLabelText={getLabelText}
-                getTestID={getTestID}
-                renderBadge={renderBadge}
-                renderIcon={renderIcon}
-                renderLabel={renderLabel}
-                activeColor={activeColor}
-                inactiveColor={inactiveColor}
-                pressColor={pressColor}
-                pressOpacity={pressOpacity}
-                onPress={() => {
-                  onTabPress && onTabPress({ route });
-                  this.props.jumpTo(route.key);
-                }}
-                onLongPress={() => onTabLongPress && onTabLongPress({ route })}
-                labelStyle={labelStyle}
-                style={tabStyle}
-              />
-            ))}
-          </Animated.ScrollView>
-        </View>
-      </Animated.View>
+            {this.props.renderIndicator({
+              position,
+              layout,
+              navigationState,
+              jumpTo,
+              addListener,
+              removeListener,
+              width: tabWidth,
+              style: indicatorStyle,
+            })}
+          </Animated.View>
+          <View style={styles.scroll}>
+            <Animated.ScrollView
+              horizontal
+              keyboardShouldPersistTaps="handled"
+              scrollEnabled={scrollEnabled}
+              bounces={bounces}
+              alwaysBounceHorizontal={false}
+              scrollsToTop={false}
+              showsHorizontalScrollIndicator={false}
+              automaticallyAdjustContentInsets={false}
+              overScrollMode="never"
+              contentContainerStyle={[
+                styles.tabContent,
+                scrollEnabled ? null : styles.container,
+                contentContainerStyle,
+              ]}
+              scrollEventThrottle={16}
+              onScroll={Animated.event(
+                [
+                  {
+                    nativeEvent: {
+                      contentOffset: { x: this.state.scrollAmount },
+                    },
+                  },
+                ],
+                { useNativeDriver: true }
+              )}
+              onScrollBeginDrag={this._handleBeginDrag}
+              onScrollEndDrag={this._handleEndDrag}
+              onMomentumScrollBegin={this._handleMomentumScrollBegin}
+              onMomentumScrollEnd={this._handleMomentumScrollEnd}
+              contentOffset={this.state.initialOffset}
+              ref={el => (this._scrollView = el && el.getNode())}
+            >
+              {routes.map((route: T) => (
+                <TabBarItem
+                  key={route.key}
+                  position={position}
+                  route={route}
+                  tabWidth={tabWidth}
+                  navigationState={navigationState}
+                  scrollEnabled={scrollEnabled}
+                  getAccessibilityLabel={getAccessibilityLabel}
+                  getAccessible={getAccessible}
+                  getLabelText={getLabelText}
+                  getTestID={getTestID}
+                  renderBadge={renderBadge}
+                  renderIcon={renderIcon}
+                  renderLabel={renderLabel}
+                  activeColor={activeColor}
+                  inactiveColor={inactiveColor}
+                  pressColor={pressColor}
+                  pressOpacity={pressOpacity}
+                  onPress={() => {
+                    onTabPress && onTabPress({ route });
+                    this.props.jumpTo(route.key);
+                  }}
+                  onLongPress={() =>
+                    onTabLongPress && onTabLongPress({ route })
+                  }
+                  labelStyle={labelStyle}
+                  style={tabStyle}
+                />
+              ))}
+            </Animated.ScrollView>
+          </View>
+        </Animated.View>
+      </Gradient>
     );
   }
 }

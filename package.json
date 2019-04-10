@@ -77,5 +77,8 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules"
     ]
+  },
+  "dependencies": {
+    "react-native-linear-gradient": "^2.5.4"
   }
 }
